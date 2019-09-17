@@ -4,8 +4,9 @@ const express = require('express')
 const logger = require('morgan')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const xssFilter = require('x-xss-protection')
 
-// const userRoute = require('./src/routes/userRoute')
+const userRoute = require('./src/routes/user')
 const facilityRoute = require('./src/routes/facility')
 const hotelRoute = require('./src/routes/hotel')
 
@@ -13,6 +14,7 @@ const app = express()
 const PORT = process.env.PORT || 1010
 
 app.use(cors())
+app.use(xssFilter())
 
 app.listen(PORT, () => {
     console.log('Server is running on PORT ' + PORT)
