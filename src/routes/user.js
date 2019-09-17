@@ -8,5 +8,7 @@ Route
     .post('/register', userController.actionRegisterUser)
     .post('/mitraregister', userController.actionRegisterPartner)
     .post('/login', userController.actionLogin)
+    .get('/:id', userController.actionFindUserById)
+    .delete('/:id', userController.actionDeleteUser)
 
 module.exports = Route

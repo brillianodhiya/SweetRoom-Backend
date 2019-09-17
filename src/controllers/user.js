@@ -44,6 +44,7 @@ module.exports = {
                         res.status(200).send({
                             status: 200,
                             message: 'Register Success',
+                            result: result,
                             accessToken: accessToken,
                         })
                         // MiscHelper.response(res, resultRegister, 200)
@@ -96,6 +97,7 @@ module.exports = {
                         res.status(200).send({
                             status: 200,
                             message: 'Register Success',
+                            result: result,
                             accessToken: accessToken,
                         })
                
@@ -139,9 +141,49 @@ module.exports = {
                     res.status(200).send({
                         status: 200,
                         message: 'Login Success',
+                        result: row,
                         accessToken: accessToken,
                     })
                 })
             })
+            .catch(err => res.send({
+                status: 400,
+                message: 'Somthing Went Wrong',
+                err
+            }))
+    },
+    actionFindUserById: (req, res) => {
+        const id = req.params.id
+
+        userAction.findUserById(id)
+            .then((resultUser) => {
+                res.status(200).send({
+                    status: 200,
+                    message: 'Success Find User',
+                    result: resultUser
+                })
+            })
+            .catch(err => res.send({
+                status: 400,
+                message: 'Somthing Went Wrong',
+                err
+            }))
+    },
+    actionDeleteUser: (req, res) => {
+        const id = req.params.id
+
+        userAction.deleteUser(id)
+            .then((resultDelete) => {
+                res.status(200).send({
+                    status: 200,
+                    message: 'Success Deleting',
+                    result: resultDelete
+                })
+            })
+            .catch(err => res.send({
+                status: 400,
+                message: 'Something Went Wrong',
+                err
+            }))
     }
 }
