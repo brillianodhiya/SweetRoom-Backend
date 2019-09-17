@@ -6,9 +6,10 @@ const Auth = require('../middleware/auth')
 
 Route
     .post('/register', userController.actionRegisterUser)
-    .post('/mitraregister', userController.actionRegisterPartner)
+    .post('/mitra', userController.actionRegisterPartner)
     .post('/login', userController.actionLogin)
-    .get('/:id', userController.actionFindUserById)
+    .get('/:id', Auth,userController.actionFindUserById)
     .delete('/:id', userController.actionDeleteUser)
+    .patch('/:id', Auth,userController.actionUpdateUser)
 
 module.exports = Route
