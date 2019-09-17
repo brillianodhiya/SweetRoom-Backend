@@ -41,26 +41,25 @@ module.exports = {
                             firebase_id: user.firebase_id
                         }, process.env.SECRET_KEY)
                         // const resultRegister = [result, accessToken]
-                        res.status(200).send({
-                            status: 200,
-                            message: 'Register Success',
-                            result: result,
+                        // res.status(200).send({
+                        //     status: 200,
+                        //     message: 'Register Success',
+                        //     result: result,
+                        //     accessToken: accessToken,
+                        // })
+                        res.json({
+                            success: true,
+                            message: 'Success Register',
+                            data: result,
                             accessToken: accessToken,
+                            error: ['']
                         })
                         // MiscHelper.response(res, resultRegister, 200)
                     })
                 })
-                .catch(err => res.send({
-                    status: 400,
-                    message: 'Something Went Wrong',
-                    err
-                }))
+                .catch(err => res.json({ success: false, message: 'fail get data', data: [''], error: err }))
             })
-            .catch(err => res.send({
-                status: 400,
-                message: 'Somthing Went Wrong',
-                err
-            }))
+            .catch(err => res.json({ success: false, message: 'fail get data', data: [''], error: err }))
     },
     actionRegisterPartner: (req, res) => {
         const first_name = req.body.first_name
@@ -93,27 +92,26 @@ module.exports = {
                             latitude: user.latitude,
                             firebase_id: user.firebase_id
                         }, process.env.SECRET_KEY)
-               
-                        res.status(200).send({
-                            status: 200,
-                            message: 'Register Success',
-                            result: result,
+                        // const resultRegister = [result, accessToken]
+                        // res.status(200).send({
+                        //     status: 200,
+                        //     message: 'Register Success',
+                        //     result: result,
+                        //     accessToken: accessToken,
+                        // })
+                        res.json({
+                            success: true,
+                            message: 'Success Register',
+                            data: result,
                             accessToken: accessToken,
+                            error: ['']
                         })
-               
+                        // MiscHelper.response(res, resultRegister, 200)
                     })
                 })
-                .catch(err => res.send({
-                    status: 400,
-                    message: 'Something Went Wrong',
-                    err
-                }))
+                .catch(err => res.json({ success: false, message: 'fail get data', data: [''], error: err }))
             })
-            .catch(err => res.send({
-                status: 400,
-                message: 'Somthing Went Wrong',
-                err
-            }))
+            .catch(err => res.json({ success: false, message: 'fail get data', data: [''], error: err }))
     },
     actionLogin: (req, res) => {
         const email = req.body.email
@@ -157,33 +155,27 @@ module.exports = {
 
         userAction.findUserById(id)
             .then((resultUser) => {
-                res.status(200).send({
-                    status: 200,
+                res.json({
+                    success: true,
                     message: 'Success Find User',
-                    result: resultUser
+                    data: resultUser,
+                    error: ['']
                 })
             })
-            .catch(err => res.send({
-                status: 400,
-                message: 'Somthing Went Wrong',
-                err
-            }))
+            .catch(err => res.json({ success: false, message: 'fail get data', data: [''], error: err }))
     },
     actionDeleteUser: (req, res) => {
         const id = req.params.id
 
         userAction.deleteUser(id)
             .then((resultDelete) => {
-                res.status(200).send({
-                    status: 200,
+                res.json({
+                    success: true,
                     message: 'Success Deleting',
-                    result: resultDelete
+                    data: resultDelete,
+                    error: ['']
                 })
             })
-            .catch(err => res.send({
-                status: 400,
-                message: 'Something Went Wrong',
-                err
-            }))
+            .catch(err => res.json({ success: false, message: 'fail get data', data: [''], error: err }))
     }
 }
