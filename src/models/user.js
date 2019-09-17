@@ -7,7 +7,7 @@ module.exports = {
         })
     }),
     createUser: (user) => new Promise((resolve, reject) => {
-        conn.query('INSERT INTO user (first_name, last_name, email, password, birth) VALUES (?,?,?,?,?)', user, (err, result) => {
+        conn.query('INSERT INTO user (first_name, last_name, email, password, birth, photo, level, longitude, latitude, firebase_id) VALUES (?,?,?,?,?,?,?,?,?,?)', user, (err, row) => {
             !err ? resolve(row) : reject(err)
         })
     })
