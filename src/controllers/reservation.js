@@ -121,6 +121,56 @@ module.exports = {
         })
       );
   },
+  actionMakeSuccess: (req, res) => {
+    const id = req.params.id;
+    const data = {
+      status: 'success'
+    };
+
+    reservation
+      .actionCheck(data, id)
+      .then(row => {
+        res.json({
+          success: true,
+          message: "Success",
+          data: row,
+          error: [""]
+        });
+      })
+      .catch(err =>
+        res.json({
+          success: false,
+          message: "Something Wrong",
+          data: id,
+          error: err
+        })
+      );
+  },
+  actionMakeCancel: (req, res) => {
+    const id = req.params.id;
+    const data = {
+      status: 'cancel'
+    };
+
+    reservation
+      .actionCheck(data, id)
+      .then(row => {
+        res.json({
+          success: true,
+          message: "Success Cancel",
+          data: row,
+          error: [""]
+        });
+      })
+      .catch(err =>
+        res.json({
+          success: false,
+          message: "Something Wrong",
+          data: id,
+          error: err
+        })
+      );
+  },
   actionFindReservation: (req, res) => {
     const id = req.params.id;
 

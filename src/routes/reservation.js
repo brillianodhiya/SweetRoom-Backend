@@ -13,5 +13,7 @@ Route
     .get('/place/:hotel_id', reservationController.actionFindReservByPlace)
     .get('/user/:user_id', reservationController.actionFindReservByUser)
     .delete('/delete/:id', reservationController.actionDeleteReservation)
+    .post('/makeStatusSuccess/:id', reservationController.actionMakeSuccess)
+    .post('/makeStatusCancel/:id', reservationController.actionMakeCancel)
 
 module.exports = Route
