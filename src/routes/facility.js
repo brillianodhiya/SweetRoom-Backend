@@ -2,7 +2,7 @@ const express = require('express')
 const Route = express.Router()
 
 const Conttroller = require('../controllers/facility')
-// const auth = require('../middleware/auth')
+const redis = require('../middleware/redis')
 
 Route
 // check auth
@@ -10,15 +10,15 @@ Route
 //   .post('/*', auth.auth, auth.authAdmin)
 //   .patch('/*', auth.auth, auth.authAdmin)
 //   .delete('/*', auth.auth, auth.authAdmin)
-// get all genre
-  .get('/', Conttroller.getData)
-// get specific genre by id
+// get all facility
+  .get('/', redis.cacheGetAllFacility, Conttroller.getData)
+// get specific facility by id
   .get('/:id', Conttroller.getDataDetail)
-// add genre
+// add facility
   .post('/', Conttroller.insertData)
-// update genre
+// update facility
   .patch('/:id', Conttroller.updateData)
-// delete genre
+// delete facility
   .delete('/:id', Conttroller.deleteData)
 
 module.exports = Route

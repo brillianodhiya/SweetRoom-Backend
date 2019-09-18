@@ -1,23 +1,35 @@
+const models_hotel = require('../models/hotel')
 const models_feedback = require('../models/feedback')
 const helper = require('../middleware/helpers')
 
 module.exports = {
   getData: (req, res) => {
     models_feedback.getData()
-      .then(result => res.json({ success: true, message: 'succes get data', data: result, error: [''] }))
-      .catch(err => res.json({ success: false, message: 'fail get data', data: [''], error: err }))
+      .then(result => {
+        const resData = { success: true, message: 'succes get data', data: result, error: [''] }
+        helper.response(res, resData, 200, '')
+      })
+      .catch(err => {
+        const resData = { success: false, message: 'fail get data', data: [''], error: err }
+        helper.response(res, resData, 500, '')
+      })
   },
   getDataDetail: (req, res) => {
     const id = req.params.id
     models_feedback.getDetailData(id)
       .then(result => {
         if (result.length === 0) {
-          res.json({ success: false, message: 'feedback not found', data: id, error: 'cant get data in database' })
+          const resData = { success: false, message: 'feedback not found', data: id, error: 'cant get data in database' }
+          helper.response(res, resData, 404, '')
         } else {
-          res.json({ success: true, message: 'succes get detail data', data: result, error: '' })
+          const resData = { success: true, message: 'succes get detail data', data: result, error: '' }
+          helper.response(res, resData, 200, '')
         }
       })
-      .catch(err => res.json({ success: false, message: 'something wrong', data: id, error: err }))
+      .catch(err => {
+        const resData = { success: false, message: 'something wrong', data: id, error: err }
+        helper.response(res, resData, 500, '')
+      })
   },
   deleteData: (req, res) => {
     const id = req.params.id
@@ -25,14 +37,20 @@ module.exports = {
       .then(result => {
         if (result.affectedRows === 1) {
           models_feedback.getData()
-          res.json({ success: true, message: 'feedback deleted', data: id, error: '' })
+          const resData = { success: true, message: 'feedback deleted', data: id, error: '' }
+          helper.response(res, resData, 200, '')
         } else if (res.status(404)) {
-          res.json({ success: false, message: 'feedback not found', data: id, error: '' })
+          const resData = { success: false, message: 'feedback not found', data: id, error: '' }
+          helper.response(res, resData, 404, '')
         } else {
-          res.json({ success: false, message: 'feedback can not deleted', data: id, error: '' })
+          const resData = { success: false, message: 'feedback can not deleted', data: id, error: '' }
+          helper.response(res, resData, 401, '')
         }
       })
-      .catch(err => res.json({ succes: false, message: 'feedback can not deleted', data: id, error: err }))
+      .catch(err => {
+        const resData = { succes: false, message: 'feedback can not deleted', data: id, error: err }
+        helper.response(res, resData, 500, '')
+      })
   },
   updateData: (req, res) => {
     const data = req.body
@@ -43,12 +61,17 @@ module.exports = {
       .then(result => {
         if (result.affectedRows === 1) {
           models_feedback.getData()
-          res.json({ success: true, message: 'updated feedback', data: [id, data], error: '' })
+          const resData = { success: true, message: 'updated feedback', data: [id, data], error: '' }
+          helper.response(res, resData, 200, '')
         } else {
-          res.json({ success: false, message: 'cant update feedback', data: [id, data], error: 'cant get in database' })
+          const resData = { success: false, message: 'cant update feedback', data: [id, data], error: 'cant get in database' }
+          helper.response(res, resData, 401, '')
         }
       })
-      .catch(err => res.json({ success: false, message: 'cant update feedback', data: [id, data], error: err }))
+      .catch(err => {
+        const resData = { success: false, message: 'cant update feedback', data: [id, data], error: err }
+        helper.response(res, resData, 500, '')
+      })
   },
   insertData: (req, res) => {
     const data = {
@@ -60,12 +83,21 @@ module.exports = {
     models_feedback.insert(data)
       .then(result => {
         if (result.affectedRows === 1) {
+          const updatedata = { rate: req.body.rating || 5 }
+          const id = { id: data.hotel_id }
+          models_hotel.update(updatedata, id)
+          models_hotel.getData()
           models_feedback.getData()
-          res.json({ success: true, message: 'added feedback', data: data, error: '' })
+          const resData = { success: true, message: 'added feedback', data: data, error: '' }
+          helper.response(res, resData, 200, '')
         } else {
-          res.json({ success: false, message: 'cant added feedback', data: data, error: 'cant get data in database' })
+          const resData = { success: false, message: 'cant added feedback', data: data, error: 'cant get data in database' }
+          helper.response(res, resData, 404, '')
         }
       })
-      .catch(err => res.json({ success: false, message: 'cant added feedback', data: data, error: err }))
+      .catch(err => {
+        const resData = { success: false, message: 'cant added feedback', data: data, error: err }
+        helper.response(res, resData, 500, '')
+      })
   }
 }
