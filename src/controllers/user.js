@@ -17,9 +17,9 @@ module.exports = {
     const birth = req.body.birth;
     const photo = "https://cdn.kastatic.org/images/avatars/svg/marcimus.svg";
     const level = "user";
-    const longitude = req.body.longitude;
-    const latitude = req.body.latitude;
-    const firebase_id = req.body.firebase_id;
+    const longitude = req.body.longitude || 1029209;
+    const latitude = req.body.latitude || 87318238;
+    const firebase_id = req.body.firebase_id || 1111;
 
     userAction
       .createUser([
@@ -99,9 +99,9 @@ module.exports = {
     const birth = req.body.birth;
     const photo = "https://cdn.kastatic.org/images/avatars/svg/marcimus.svg";
     const level = "mitra";
-    const longitude = req.body.longitude;
-    const latitude = req.body.latitude;
-    const firebase_id = req.body.firebase_id;
+    const longitude = req.body.longitude || 1029209;
+    const latitude = req.body.latitude || 87318238;
+    const firebase_id = req.body.firebase_id || 1111;
 
     userAction
       .createUser([
@@ -180,11 +180,19 @@ module.exports = {
     userAction
       .findUserByEmail(email)
       .then(row => {
+        if (row.length == 0) return res.json({
+          message: 'User not found',
+          status: 401
+        });
+        // console.log(row)
         Object.keys(row).forEach(key => {
           const user = row[key];
 
           const result = bcrypt.compareSync(password, user.password);
-          if (!result) return res.status(401).send("User not Found");
+          if (!result) return res.json({
+            message: 'Wrong Email or Password',
+            status: 402
+          });
           const accessToken = jwt.sign(
             {
               id: user.id,
@@ -200,12 +208,14 @@ module.exports = {
             },
             process.env.SECRET_KEY
           );
+
           res.status(200).send({
             status: 200,
             message: "Login Success",
             result: row,
             accessToken: accessToken
           });
+          
         });
       })
       .catch(err =>
@@ -289,5 +299,75 @@ module.exports = {
               error: err
           })
       })
+  },
+  actionFindeByEmail: (req, res) => {
+    const email = req.body.email
+
+    userAction.findUserByEmail(email)
+    .then(row => {
+      if (row.length > 0) {
+        res.json({
+            success: true,
+            message: "Email Register",
+            data: row,
+            error: ['']
+        })
+      } else {
+        res.json({
+          success: false,
+          message: "Email not found",
+          data: row,
+          error: ['']
+      })
+      }
+  })
+  .catch(err => {
+      res.json({
+          success: false,
+          message: "Search Failed",
+          data: [''],
+          error: err
+      })
+  })
+  },
+  actionGetAll: (req, res) => {
+    userAction.getAllUser()
+    .then(row => {
+      res.json({
+        success: true,
+        message: 'Succes Get',
+        data: row,
+        error: ['']
+
+      })
+    })
+    .catch(err => {
+      res.json({
+        success: false,
+        message: 'failed get',
+        data: [''],
+        error: err
+      })
+    })
+  },
+  actionGetEmail: (req, res) => {
+    userAction.getAllEmail()
+    .then(row => {
+      res.json({
+        success: true,
+        message: 'Succes Get',
+        data: row,
+        error: ['']
+
+      })
+    })
+    .catch(err => {
+      res.json({
+        success: false,
+        message: 'failed get',
+        data: [''],
+        error: err
+      })
+    })
   }
 };

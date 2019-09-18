@@ -7,6 +7,18 @@ module.exports = {
         !err ? resolve(row) : reject(err);
       });
     }),
+  getAllUser: () =>
+    new Promise((resolve, reject) => {
+      conn.query("SELECT * FROM user", (err, row) => {
+      !err ? resolve(row) : reject(err);
+    });
+  }),
+  getAllEmail: () =>
+  new Promise((resolve, reject) => {
+    conn.query("SELECT email FROM user", (err, row) => {
+    !err ? resolve(row) : reject(err);
+  });
+}),
   createUser: user =>
     new Promise((resolve, reject) => {
       conn.query(
