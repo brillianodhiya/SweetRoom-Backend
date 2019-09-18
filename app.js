@@ -11,6 +11,7 @@ const facilityRoute = require('./src/routes/facility')
 const hotelRoute = require('./src/routes/hotel')
 const roomRoute = require('./src/routes/room')
 const feedbackRoute = require('./src/routes/feedback')
+const reservationRoute = require('./src/routes/reservation')
 
 const app = express()
 const PORT = process.env.PORT || 1010
@@ -33,4 +34,5 @@ app.use('/facility', facilityRoute)
 app.use('/hotel', hotelRoute)
 app.use('/room', roomRoute)
 app.use('/feedback', feedbackRoute)
+app.use('/reservation', reservationRoute)
 app.use('/', (req, res) => res.status(404).json({ message: '404 not found' }))

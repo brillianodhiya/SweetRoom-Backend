@@ -3,8 +3,10 @@ const Route = express.Router()
 
 const Conttroller = require('../controllers/facility')
 // const auth = require('../middleware/auth')
+const Auth = require('../middleware/auth')
 
 Route
+  .all('/*', Auth)
 // check auth
   // .get('/*', auth.auth)
 //   .post('/*', auth.auth, auth.authAdmin)
