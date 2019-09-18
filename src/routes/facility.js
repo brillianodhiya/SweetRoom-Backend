@@ -3,8 +3,10 @@ const Route = express.Router()
 
 const Conttroller = require('../controllers/facility')
 const redis = require('../middleware/redis')
+const Auth = require('../middleware/auth')
 
 Route
+  .all('/*', Auth)
 // check auth
   // .get('/*', auth.auth)
 //   .post('/*', auth.auth, auth.authAdmin)
