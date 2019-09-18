@@ -1,4 +1,5 @@
 const conn = require('../config/dbconfig')
+const client = require('../config/redis')
 const sql = ""
 module.exports = {
   insert: (data) => {
@@ -38,6 +39,8 @@ module.exports = {
     return new Promise((resolve, reject) => {
       conn.query('SELECT * FROM `room` ORDER BY id ASC', (err, result) => {
         if (!err) {
+          const data = { success: true, message: 'succes get data', data: result }
+          client.setex('getRoom', 3600, JSON.stringify(data))
           resolve(result)
         } else {
           reject(err)

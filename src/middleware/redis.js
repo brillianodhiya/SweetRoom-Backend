@@ -1,10 +1,73 @@
-require('dotenv').config()
+const client = require('../config/redis')
+const helper = require('../middleware/helpers')
 
-const MiscHelper = require('./helpers')
-const redis = require('redis')
-const REDIS_PORT = process.env.REDIS_PORT || 6379
-const client = redis.createClient(REDIS_PORT)
+module.exports = {
+    // ====== hotel =====
+    cacheGetAllHotel: (req, res, next) => {
+        client.get('getHotel', (err, data) => {
+            if (err) throw err;
 
-// module.exports = {
-//     cache
-// }
+            if (data !== null) {
+                console.log('redis')
+                helper.response(res, JSON.parse(data), 200);
+            } else {
+                next();
+            }
+        })
+    },
+    clearGetAllHotel: (req, res, next) => {
+        client.del('getHotel')
+        next();
+    },
+    // ====== Room =====
+    cacheGetAllRoom: (req, res, next) => {
+        client.get('getRoom', (err, data) => {
+            if (err) throw err;
+
+            if (data !== null) {
+                console.log('redis')
+                helper.response(res, JSON.parse(data), 200);
+            } else {
+                next();
+            }
+        })
+    },
+    clearGetAllRoom: (req, res, next) => {
+        client.del('getRoom')
+        next();
+    },
+    // ====== Feedback =====
+    cacheGetAllFeedback: (req, res, next) => {
+        client.get('getFeedback', (err, data) => {
+            if (err) throw err;
+
+            if (data !== null) {
+                console.log('redis')
+                helper.response(res, JSON.parse(data), 200);
+            } else {
+                next();
+            }
+        })
+    },
+    clearGetAllFeedback: (req, res, next) => {
+        client.del('getFeedback')
+        next();
+    },
+    // ====== Facility =====
+    cacheGetAllFacility: (req, res, next) => {
+        client.get('getFacility', (err, data) => {
+            if (err) throw err;
+
+            if (data !== null) {
+                console.log('redis')
+                helper.response(res, JSON.parse(data), 200);
+            } else {
+                next();
+            }
+        })
+    },
+    clearGetAllFacility: (req, res, next) => {
+        client.del('getFacility')
+        next();
+    }
+}

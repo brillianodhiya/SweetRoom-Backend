@@ -2,6 +2,7 @@ const express = require('express')
 const Route = express.Router()
 
 const Conttroller = require('../controllers/hotel')
+const redis = require('../middleware/redis')
 // const auth = require('../middleware/auth')
 const Auth = require('../middleware/auth')
 
@@ -12,15 +13,15 @@ Route
 //   .post('/*', auth.auth, auth.authAdmin)
 //   .patch('/*', auth.auth, auth.authAdmin)
 //   .delete('/*', auth.auth, auth.authAdmin)
-// get all genre
-  .get('/', Conttroller.getData)
-// get specific genre by id
+// get all hotel
+  .get('/', redis.cacheGetAllHotel, Conttroller.getData)
+// get specific hotel by id
   .get('/:id', Conttroller.getDataDetail)
-// add genre
+// add hotel
   .post('/', Conttroller.insertData)
-// update genre
+// update hotel
   .patch('/:id', Conttroller.updateData)
-// delete genre
+// delete hotel
   .delete('/:id', Conttroller.deleteData)
 
 module.exports = Route
