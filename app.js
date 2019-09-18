@@ -9,6 +9,8 @@ const xssFilter = require('x-xss-protection')
 const userRoute = require('./src/routes/user')
 const facilityRoute = require('./src/routes/facility')
 const hotelRoute = require('./src/routes/hotel')
+const roomRoute = require('./src/routes/room')
+const feedbackRoute = require('./src/routes/feedback')
 
 const app = express()
 const PORT = process.env.PORT || 1010
@@ -26,7 +28,9 @@ app.use(bodyParser.urlencoded({
     extended: false
 }))
 
-// app.use('/user', userRoute)
+app.use('/user', userRoute)
 app.use('/facility', facilityRoute)
 app.use('/hotel', hotelRoute)
+app.use('/room', roomRoute)
+app.use('/feedback', feedbackRoute)
 app.use('/', (req, res) => res.status(404).json({ message: '404 not found' }))
