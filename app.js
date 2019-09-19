@@ -13,6 +13,7 @@ const roomRoute = require('./src/routes/room')
 const feedbackRoute = require('./src/routes/feedback')
 const favoriteRoute = require('./src/routes/favorite')
 const reservationRoute = require('./src/routes/reservation')
+const payments = require('./src/routes/payment')
 
 const app = express()
 const PORT = process.env.PORT || 1010
@@ -37,4 +38,5 @@ app.use('/room', roomRoute)
 app.use('/feedback', feedbackRoute)
 app.use('/favorite', favoriteRoute)
 app.use('/reservation', reservationRoute)
+app.use('/payments', payments)
 app.use('/', (req, res) => res.status(404).json({ message: '404 not found' }))

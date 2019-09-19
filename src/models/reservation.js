@@ -4,7 +4,7 @@ module.exports = {
   actionReservation: data =>
     new Promise((resolve, reject) => {
       conn.query(
-        "INSERT INTO hotel_reservation (hotel_id, user_id, invoice, reservation_date, num_people, bed_type, room_number, price, plan_checkin, plan_checkout) VALUES (?,?,?,?,?,?,?,?,?,?)",
+        "INSERT INTO hotel_reservation (hotel_id, user_id, invoice, reservation_date, num_people, bed_type, room_number, price, plan_checkin, plan_checkout, status) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
         data,
         (err, row) => {
           !err ? resolve(row) : reject(err);
@@ -91,10 +91,17 @@ module.exports = {
     }),
   actionHistory: user_id =>
     new Promise((resolve, reject) => {
-      conn.query("SELECT hotel_reservation.id, hotel.image, hotel.hotel_name,\
-       hotel.city, hotel_reservation.status, hotel.rate, hotel_reservation.plan_checkin,\
-        hotel_reservation.plan_checkout, hotel_reservation.price, hotel_reservation.invoice\
-        FROM hotel_reservation JOIN hotel ON hotel_reservation.hotel_id = hotel.id WHERE hotel_reservation.user_id = ? ", [user_id], (err, row) => {
+      conn.query("SELECT hotel_reservation.id, hotel.image, hotel.hotel_name, \
+      hotel.city, hotel_reservation.status, hotel.rate, hotel_reservation.plan_checkin, \
+       hotel_reservation.plan_checkout, hotel_reservation.price, hotel_reservation.invoice, \
+       payment.id as pid, payment.payment_id \
+       FROM hotel_reservation JOIN hotel ON hotel_reservation.hotel_id = hotel.id JOIN payment ON hotel_reservation.invoice = payment.external_id WHERE hotel_reservation.user_id = ? ORDER BY hotel_reservation.id DESC", [user_id], (err, row) => {
+        !err ? resolve(row) : reject(err)
+      })
+    }),
+  getLatest: user_id =>
+    new Promise((resolve, reject) => {
+      conn.query("SELECT * FROM `hotel_reservation` WHERE status = 'waiting payment' AND user_id = ? ORDER BY id DESC", [user_id], (err, row) => {
         !err ? resolve(row) : reject(err)
       })
     })

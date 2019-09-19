@@ -20,7 +20,7 @@ module.exports = {
     const level = "user";
     const longitude = req.body.longitude || 1029209;
     const latitude = req.body.latitude || 87318238;
-    const firebase_id = req.body.firebase_id || 1111;
+    const firebase_id = req.body.firebase_id;
 
     userAction
       .createUser([
@@ -102,7 +102,7 @@ module.exports = {
     const level = "mitra";
     const longitude = req.body.longitude || 1029209;
     const latitude = req.body.latitude || 87318238;
-    const firebase_id = req.body.firebase_id || 91;
+    const firebase_id = req.body.firebase_id;
 
     userAction
       .createUser([
@@ -283,7 +283,10 @@ module.exports = {
           photo: req.body.photo,
           city: req.body.city,
           address: req.body.address,
-          phone: req.body.phone
+          phone: req.body.phone,
+          firebase_id: req.body.firebase_id,
+          device_id: req.body.device_id,
+          pushToken: req.body.pushToken
       }
 
       userAction.updateUser(id, data)
