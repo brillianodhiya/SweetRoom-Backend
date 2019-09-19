@@ -88,5 +88,14 @@ module.exports = {
       conn.query("SELECT * FROM room WHERE id = ?", [id], (err, row) => {
         !err ? resolve(row) : reject(err);
       });
+    }),
+  actionHistory: user_id =>
+    new Promise((resolve, reject) => {
+      conn.query("SELECT hotel_reservation.id, hotel.image, hotel.hotel_name,\
+       hotel.city, hotel_reservation.status, hotel.rate, hotel_reservation.plan_checkin,\
+        hotel_reservation.plan_checkout, hotel_reservation.price, hotel_reservation.invoice\
+        FROM hotel_reservation JOIN hotel ON hotel_reservation.hotel_id = hotel.id WHERE hotel_reservation.user_id = ? ", [user_id], (err, row) => {
+        !err ? resolve(row) : reject(err)
+      })
     })
 };

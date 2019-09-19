@@ -4,6 +4,7 @@ const userAction = require("../models/user");
 const jwt = require("jsonwebtoken");
 // const MiscHelper = require('../middleware/helpers')
 const bcrypt = require("bcryptjs");
+const jwtDecode = require('jwt-decode')
 
 module.exports = {
   actionRegisterUser: (req, res) => {
@@ -66,7 +67,7 @@ module.exports = {
               res.json({
                 success: true,
                 message: "Success Register",
-                data: result,
+                result: row,
                 accessToken: accessToken,
                 error: [""]
               });
@@ -101,7 +102,7 @@ module.exports = {
     const level = "mitra";
     const longitude = req.body.longitude || 1029209;
     const latitude = req.body.latitude || 87318238;
-    const firebase_id = req.body.firebase_id || 1111;
+    const firebase_id = req.body.firebase_id || 91;
 
     userAction
       .createUser([
@@ -148,7 +149,7 @@ module.exports = {
               res.json({
                 success: true,
                 message: "Success Register",
-                data: result,
+                result: row,
                 accessToken: accessToken,
                 error: [""]
               });
@@ -227,7 +228,10 @@ module.exports = {
       );
   },
   actionFindUserById: (req, res) => {
-    const id = req.params.id;
+    const token = req.headers['sweet_token']
+    const decoded = jwtDecode(token)
+
+    const id = decoded.id;
 
     userAction
       .findUserById(id)

@@ -6,7 +6,7 @@ const Auth = require('../middleware/auth')
 
 Route
     .all('/*', Auth)
-    .post('/:hotel_id/:user_id', reservationController.insertReservation)
+    .post('/insert/:hotel_id', reservationController.insertReservation)
     .patch('/checkin/:id', reservationController.actionCheckIn)
     .patch('/checkout/:id', reservationController.actionCheckOut)
     .get('/:id', reservationController.actionFindReservation)
@@ -15,5 +15,6 @@ Route
     .delete('/delete/:id', reservationController.actionDeleteReservation)
     .post('/makeStatusSuccess/:id', reservationController.actionMakeSuccess)
     .post('/makeStatusCancel/:id', reservationController.actionMakeCancel)
+    .get('/history/a', reservationController.History)
 
 module.exports = Route
