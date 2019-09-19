@@ -10,6 +10,7 @@ const userRoute = require('./src/routes/user')
 const facilityRoute = require('./src/routes/facility')
 const hotelRoute = require('./src/routes/hotel')
 const reservationRoute = require('./src/routes/reservation')
+const payments = require('./src/routes/payment')
 
 const app = express()
 const PORT = process.env.PORT || 1010
@@ -31,4 +32,5 @@ app.use('/user', userRoute)
 app.use('/facility', facilityRoute)
 app.use('/hotel', hotelRoute)
 app.use('/reservation', reservationRoute)
+app.use('/payments', payments)
 app.use('/', (req, res) => res.status(404).json({ message: '404 not found' }))

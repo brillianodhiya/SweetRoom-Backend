@@ -5,7 +5,7 @@ const axios = require("axios")
 const express = require('express')
 const Request = express.Router()
 
-const Authorization = process.env.BASIC_TOKEN
+const Authorization = 'Basic eG5kX2RldmVsb3BtZW50XzY0S1hHd3hzYWJtVnVUbUxkYTZrNllQVFpiNWdtbmM4RG5VN0xQUnowZFdRTmhZekl1VnBqRFhHdmNscVc6'
 
 module.exports = {
     actionPay: (req, res) => {
@@ -17,46 +17,93 @@ module.exports = {
         payment.getPaymentPrice(id)
             .then(row => {
                 Object.keys(row).forEach(key => {
-                    const data = row[key]
+                    const data_pay = row[key]
                     
-                    const external_id = data.invoice
-                    const amount = data.price
+                    const external_id = data_pay.invoice
+                    const amount = data_pay.price
                     const payer_email = decoded.email
-                    const description = 'Room Number' + data.room_number
+                    const description = 'Room Number ' + data_pay.room_number
                     const status = 'PENDING'
 
                     payment.createPayment([external_id, amount, payer_email, description, status])
-                        .then(result => {
-                            axios.post("https://api.xendit.co/v2/invoices", {
+                        .then(async result => {
+                            await axios.post("https://api.xendit.co/v2/invoices", {
                                 external_id: external_id,
                                 amount: amount,
                                 payer_email: payer_email,
                                 description: description
                             },{
-                                headers: { Authorization: Authorization }}
+                                headers: { 
+                                    Authorization: Authorization,
+                                    'Content-Type': 'application/json; charset=utf-8',
+                                    'Host': 'api.xendit.co',
+                                    'Connection': 'keep-alive'
+                                 }}
                             )
                             .then(results => {
-                                res.json({
-                                    success: true,
-                                    message: "Success Create Payment",
-                                    data: results,
-                                    error: ['']
+                                const status = {
+                                    status: results.data.status,
+                                }
+                                const datas = {
+                                    payment_id: results.data.id
+                                }
+                                payment.getStatus(status, external_id)
+                                .then(rows => {
+                                    // console.log(rows)
+                                    payment.paymentAction(datas, external_id)
+                                    .then(lastrow => {
+                                        res.json({
+                                            success: true,
+                                            message: 'Success Create Payment',
+                                            data: results.data,
+                                            action: lastrow,
+                                            error: ['']
+                                        })
+                                    })
+                                    .catch(errors => {
+                                        res.json({
+                                            success: false,
+                                            message: 'Success Result',
+                                            data: [''],
+                                            error: errors
+                                        })
+                                    })
+                                    // res.json({
+                                    //     success: false,
+                                    //     message: 'failed insert to hotel_reservation',
+                                    //     data: rows,
+                                    //     error: ['']
+                                    // })
                                 })
+                                .catch(err => {
+                                    res.json({
+                                        success: false,
+                                        message: 'failed inster to hotel_reservation',
+                                        data: [''],
+                                        error: err
+                                    })
+                                })
+                                // res.json({
+                                //     success: failed,
+                                //     message: "Success Only Create Payment",
+                                //     data: results,
+                                //     error: ['']
+                                // })
                             })
-                            .catch(err => {
+                            .catch(errs => {
                                 res.json({
                                     success: false,
                                     message: "Payment Failed",
                                     data: [''],
-                                    error: err
+                                    error: errs
                                 })
                             })
-                            res.json({
-                                success: false,
-                                message: "Insert Database",
-                                data: result,
-                                error: ['']
-                            })
+                            // res.json({
+                            //     success: false,
+                            //     message: "Insert Database",
+                            //     data: result,
+                            //     error: ['']
+                            // })
                         })
                         .catch(err => {
                             res.json({
@@ -78,7 +125,7 @@ module.exports = {
             })
     },
     callBackPayment: (req, res) => {
-        const data = {
+        const datas = {
             external_id: req.body.external_id,
             status: req.body.status,
             bank_code: req.body.bank_code,
@@ -86,15 +133,15 @@ module.exports = {
         }
         const external_id = req.body.external_id
 
-        payment.paymentAction(data, external_id)
-            .then(row => {
-                payment.makeItSuccess(external_id)
+        payment.paymentAction(datas, external_id)
+            .then(result => {
+                const status = {
+                    status: req.body.status
+                }
+                payment.getStatus(status, external_id)
                 .then(row => {
                     res.json({
-                        success: true,
-                        message: 'payment success',
-                        data: row,
-                        error: ['']
+                        row
                     })
                 })
                 .catch(err => {
@@ -105,12 +152,12 @@ module.exports = {
                         error: err
                     })
                 })
-                res.json({
-                    success: false,
-                    message: 'cant make success',
-                    data: row,
-                    error: ['']
-                })
+                // res.json({
+                //     success: false,
+                //     message: 'cant make success',
+                //     data: row,
+                //     error: ['']
+                // })
             })
             .catch(err => {
                 res.json({

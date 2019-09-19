@@ -16,5 +16,6 @@ Route
     .post('/makeStatusSuccess/:id', reservationController.actionMakeSuccess)
     .post('/makeStatusCancel/:id', reservationController.actionMakeCancel)
     .get('/history/a', reservationController.History)
+    .get('/latest/a', reservationController.getLatestRec)
 
 module.exports = Route

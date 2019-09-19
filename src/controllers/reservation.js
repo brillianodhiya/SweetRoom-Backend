@@ -17,6 +17,7 @@ module.exports = {
     const invoice = "SR" + Date.now();
     const reservation_date = new Date();
     const num_people = req.body.num_people;
+    const status = 'waiting payment'
 
     reservation
       .actionDetailHotel(room_id)
@@ -47,7 +48,8 @@ module.exports = {
                 room_number,
                 price,
                 plan_checkin,
-                plan_checkout
+                plan_checkout,
+                status
               ])
               .then(row => {
                 res.json({
@@ -293,4 +295,29 @@ module.exports = {
         });
       });
   },
+  getLatestRec: (req, res) => {
+    const token = req.headers['sweet_token']
+    const decoded = jwtDecode(token)
+
+    const user_id = decoded.id
+
+    reservation
+      .getLatest(user_id)
+      .then(row => {
+        res.json({
+          success: true,
+          message: "Success",
+          data: row,
+          error: ['']
+        })
+      })
+      .catch(err => {
+        res.json({
+          success: false,
+          message: 'failed get',
+          data: [''],
+          error: err
+        })
+      })
+  }
 };
