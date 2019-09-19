@@ -8,7 +8,7 @@ Route
     .post('/register', userController.actionRegisterUser)
     .post('/mitra', userController.actionRegisterPartner)
     .post('/login', userController.actionLogin)
-    .get('/:id', Auth,userController.actionFindUserById)
+    .get('/profile', Auth,userController.actionFindUserById)
     .delete('/:id', userController.actionDeleteUser)
     .patch('/:id', Auth,userController.actionUpdateUser)
     .post('/userbyEmail', userController.actionFindeByEmail)

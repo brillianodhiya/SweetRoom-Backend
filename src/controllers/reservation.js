@@ -1,25 +1,31 @@
 const reservation = require("../models/reservation");
 // const user = require("../models/user");
 // const hotel = require("../models/hotel");
+const jwtDecode = require('jwt-decode')
 
 module.exports = {
   insertReservation: (req, res) => {
+    const token = req.headers['sweet_token']
+    const decoded = jwtDecode(token)
+
     const hotel_id = req.params.hotel_id;
-    const user_id = req.params.user_id;
+    const room_id = req.body.room_id
+    
+    const user_id = decoded.id;
     const plan_checkin = req.body.plan_checkin;
     const plan_checkout = req.body.plan_checkout;
     const invoice = "SR" + Date.now();
-    const reservation_date = req.body.reservation_date;
+    const reservation_date = new Date();
     const num_people = req.body.num_people;
 
     reservation
-      .actionDetailHotel(hotel_id)
+      .actionDetailHotel(room_id)
       .then(result => {
         if (result.length === 0) {
           res.json({
             success: false,
             message: "hotel not found",
-            data: user_id,
+            data: room_id,
             error: "cant get data in database"
           });
         } else {
@@ -258,5 +264,33 @@ module.exports = {
           error: err
         });
       });
-  }
+  },
+  History: (req, res) => {
+
+    // const id = req.params.id;
+    const token = req.headers['sweet_token']
+    const decoded = jwtDecode(token)
+
+    const user_id = decoded.id
+
+    reservation
+      .actionHistory(user_id)
+      .then(row => {
+        // console.log(user_id)
+        res.json({
+          success: true,
+          message: "Success Get",
+          data: row,
+          error: [""]
+        });
+      })
+      .catch(err => {
+        res.json({
+          success: false,
+          message: "Something Wrong",
+          data: id,
+          error: err
+        });
+      });
+  },
 };
