@@ -3,7 +3,7 @@ const Route = express.Router()
 
 const Conttroller = require('../controllers/room')
 const redis = require('../middleware/redis')
-// const auth = require('../middleware/auth')
+const Auth = require('../middleware/auth')
 
 Route
 // check auth

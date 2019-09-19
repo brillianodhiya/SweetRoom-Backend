@@ -1,7 +1,7 @@
 const express = require('express')
 const Route = express.Router()
 
-const Conttroller = require('../controllers/feedback')
+const Conttroller = require('../controllers/favorite')
 const redis = require('../middleware/redis')
 const Auth = require('../middleware/auth')
 
@@ -11,15 +11,15 @@ Route
 //   .post('/*', auth.auth, auth.authAdmin)
 //   .patch('/*', auth.auth, auth.authAdmin)
 //   .delete('/*', auth.auth, auth.authAdmin)
-// get all feedback
-  .get('/', redis.cacheGetAllFeedback, Conttroller.getData)
-// get specific feedback by id
+// get all favorite
+  .get('/', redis.cacheGetAllFavorite, Conttroller.getData)
+// get specific favorite by id
   .get('/:id', Conttroller.getDataDetail)
-// add feedback
+// add favorite
   .post('/', Conttroller.insertData)
-// update feedback
+// update favorite
   .patch('/:id', Conttroller.updateData)
-// delete feedback
+// delete favorite
   .delete('/:id', Conttroller.deleteData)
 
 module.exports = Route

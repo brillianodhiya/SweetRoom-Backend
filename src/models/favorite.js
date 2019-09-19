@@ -4,7 +4,7 @@ const sql = ""
 module.exports = {
   insert: (data) => {
     return new Promise((resolve, reject) => {
-      conn.query('INSERT room SET ?', data, (err, result) => {
+      conn.query('INSERT favorite SET ?', data, (err, result) => {
         if (!err) {
           resolve(result)
         } else {
@@ -13,9 +13,9 @@ module.exports = {
       })
     })
   },
-  update: (data, id) => {
+  update: (data, user_id, hotel_id) => {
     return new Promise((resolve, reject) => {
-      conn.query('UPDATE room SET ? WHERE ?', [data, id], (err, result) => {
+      conn.query('UPDATE favorite SET ? WHERE ? AND ?', [data, user_id, hotel_id], (err, result) => {
         if (!err) {
           resolve(result)
         } else {
@@ -26,7 +26,7 @@ module.exports = {
   },
   delete: (id) => {
     return new Promise((resolve, reject) => {
-      conn.query('DELETE FROM room WHERE id = ?', [id], (err, result) => {
+      conn.query('DELETE FROM favorite WHERE id = ?', [id], (err, result) => {
         if (!err) {
           resolve(result)
         } else {
@@ -37,10 +37,10 @@ module.exports = {
   },
   getData: () => {
     return new Promise((resolve, reject) => {
-      conn.query('SELECT * FROM `room` ORDER BY id ASC', (err, result) => {
+      conn.query('SELECT * FROM `favorite` ORDER BY id ASC', (err, result) => {
         if (!err) {
           const data = { success: true, message: 'succes get data', data: result }
-          client.setex('getRoom', 3600, JSON.stringify(data))
+          client.setex('getFavorite', 3600, JSON.stringify(data))
           resolve(result)
         } else {
           reject(err)
@@ -50,7 +50,7 @@ module.exports = {
   },
   getDetailData: (id) => {
     return new Promise((resolve, reject) => {
-      conn.query('SELECT * FROM `room` WHERE hotel_id = ? ', [id], (err, result) => {
+      conn.query('SELECT * FROM `favorite` WHERE id = ? ', [id], (err, result) => {
         if (!err) {
           resolve(result)
         } else {
