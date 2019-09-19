@@ -50,7 +50,7 @@ module.exports = {
   },
   getDetailData: (id) => {
     return new Promise((resolve, reject) => {
-      conn.query('SELECT * FROM `room` WHERE id = ? ', [id], (err, result) => {
+      conn.query('SELECT * FROM `room` WHERE hotel_id = ? ', [id], (err, result) => {
         if (!err) {
           resolve(result)
         } else {

@@ -3,11 +3,11 @@ const Route = express.Router()
 
 const Conttroller = require('../controllers/feedback')
 const redis = require('../middleware/redis')
-// const auth = require('../middleware/auth')
+const Auth = require('../middleware/auth')
 
 Route
 // check auth
-  // .get('/*', auth.auth)
+//   .get('/*', auth.auth)
 //   .post('/*', auth.auth, auth.authAdmin)
 //   .patch('/*', auth.auth, auth.authAdmin)
 //   .delete('/*', auth.auth, auth.authAdmin)

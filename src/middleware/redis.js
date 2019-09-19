@@ -2,6 +2,23 @@ const client = require('../config/redis')
 const helper = require('../middleware/helpers')
 
 module.exports = {
+    // ====== Favorite =====
+    cacheGetAllFavorite: (req, res, next) => {
+        client.get('getFavorite', (err, data) => {
+            if (err) throw err;
+
+            if (data !== null) {
+                console.log('redis')
+                helper.response(res, JSON.parse(data), 200);
+            } else {
+                next();
+            }
+        })
+    },
+    clearGetAllFavorite: (req, res, next) => {
+        client.del('getFavorite')
+        next();
+    },
     // ====== hotel =====
     cacheGetAllHotel: (req, res, next) => {
         client.get('getHotel', (err, data) => {

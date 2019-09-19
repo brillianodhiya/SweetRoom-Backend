@@ -3,16 +3,15 @@ const Route = express.Router()
 
 const Conttroller = require('../controllers/hotel')
 const redis = require('../middleware/redis')
-// const auth = require('../middleware/auth')
 const Auth = require('../middleware/auth')
 
 Route
-  .all('/*', Auth)
 // check auth
-  // .get('/*', auth.auth)
-//   .post('/*', auth.auth, auth.authAdmin)
-//   .patch('/*', auth.auth, auth.authAdmin)
-//   .delete('/*', auth.auth, auth.authAdmin)
+//   .all('/*', Auth)
+//   .get('/*', Auth)
+//   .post('/*', Auth)
+//   .patch('/*', Auth)
+//   .delete('/*', Auth)
 // get all hotel
   .get('/', redis.cacheGetAllHotel, Conttroller.getData)
 // get specific hotel by id

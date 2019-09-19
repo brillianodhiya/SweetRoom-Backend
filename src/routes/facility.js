@@ -6,9 +6,9 @@ const redis = require('../middleware/redis')
 const Auth = require('../middleware/auth')
 
 Route
-  .all('/*', Auth)
 // check auth
-  // .get('/*', auth.auth)
+//   .all('/*', Auth)
+//   .get('/*', auth.auth)
 //   .post('/*', auth.auth, auth.authAdmin)
 //   .patch('/*', auth.auth, auth.authAdmin)
 //   .delete('/*', auth.auth, auth.authAdmin)
