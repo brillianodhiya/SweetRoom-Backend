@@ -15,69 +15,84 @@ module.exports = {
     const plan_checkin = req.body.plan_checkin;
     const plan_checkout = req.body.plan_checkout;
     const invoice = "SR" + Date.now();
-    const reservation_date = new Date();
+    const reservation_date = new Date(); 
     const num_people = req.body.num_people;
     const status = 'waiting payment'
+    const data = {
+      status: '0'
+    }
 
     reservation
       .actionDetailHotel(room_id)
       .then(result => {
-        if (result.length === 0) {
+        reservation
+        .actionChangeStatusRoom(data, room_id)
+        .then(ress => {
+          if (result.length === 0) {
+            res.json({
+              success: false,
+              message: "hotel not found",
+              data: room_id,
+              error: "cant get data in database"
+            });
+          } else {
+            Object.keys(result).forEach(key => {
+              const hotel = result[key];
+  
+              const bed_type = hotel.bed_type;
+              const room_number = hotel.room_number;
+              const price = hotel.price;
+  
+              reservation
+                .actionReservation([
+                  hotel_id,
+                  user_id,
+                  invoice,
+                  reservation_date,
+                  num_people,
+                  bed_type,
+                  room_number,
+                  price,
+                  plan_checkin,
+                  plan_checkout,
+                  status
+                ])
+                .then(row => {
+                  res.json({
+                    success: true,
+                    message: "Reservation Success",
+                    data: row,
+                    error: [""]
+                  });
+                })
+                .catch(err =>
+                  res.json({
+                    success: false,
+                    message: "Reservation Failed",
+                    data: [""],
+                    error: err
+                  })
+                );
+            });
+          }
+        })
+        .catch(err =>
           res.json({
             success: false,
-            message: "hotel not found",
-            data: room_id,
-            error: "cant get data in database"
-          });
-        } else {
-          Object.keys(result).forEach(key => {
-            const hotel = result[key];
-
-            const bed_type = hotel.bed_type;
-            const room_number = hotel.room_number;
-            const price = hotel.price;
-
-            reservation
-              .actionReservation([
-                hotel_id,
-                user_id,
-                invoice,
-                reservation_date,
-                num_people,
-                bed_type,
-                room_number,
-                price,
-                plan_checkin,
-                plan_checkout,
-                status
-              ])
-              .then(row => {
-                res.json({
-                  success: true,
-                  message: "Reservation Success",
-                  data: row,
-                  error: [""]
-                });
-              })
-              .catch(err =>
-                res.json({
-                  success: false,
-                  message: "Reservation Failed",
-                  data: [""],
-                  error: err
-                })
-              );
-          });
-        }
+            message: "something wrong",
+            data: [''],
+            error: err
+          })
+        );
       })
-      .catch(err =>
+      .catch(errors => {
         res.json({
           success: false,
           message: "something wrong",
-          data: id,
-          error: err
+          data: [''],
+          error: errors
         })
-      );
+      })
   },
   actionCheckIn: (req, res) => {
     const id = req.params.id;

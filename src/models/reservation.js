@@ -89,6 +89,12 @@ module.exports = {
         !err ? resolve(row) : reject(err);
       });
     }),
+  actionChangeStatusRoom: (data, id) =>
+   new Promise((resolve, reject) => {
+      conn.query("UPDATE room SET ? WHERE id = ? ", [data, id], (err, row) => {
+        !err ? resolve(row) : reject(err)
+      })
+   }),
   actionHistory: user_id =>
     new Promise((resolve, reject) => {
       conn.query("SELECT hotel_reservation.id, hotel.image, hotel.hotel_name, \
