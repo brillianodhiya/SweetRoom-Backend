@@ -17,7 +17,7 @@ module.exports = {
     const invoice = "SR" + Date.now();
     const reservation_date = new Date(); 
     const num_people = req.body.num_people;
-    const status = 'waiting payment'
+    const status = 'WAITING PAYMENT'
     const data = {
       status: '0'
     }

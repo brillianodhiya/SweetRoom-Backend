@@ -107,7 +107,7 @@ module.exports = {
     }),
   getLatest: user_id =>
     new Promise((resolve, reject) => {
-      conn.query("SELECT * FROM `hotel_reservation` WHERE status = 'waiting payment' AND user_id = ? ORDER BY id DESC", [user_id], (err, row) => {
+      conn.query("SELECT * FROM `hotel_reservation` WHERE status = 'WAITING PAYMENT' AND user_id = ? ORDER BY id DESC", [user_id], (err, row) => {
         !err ? resolve(row) : reject(err)
       })
     })
