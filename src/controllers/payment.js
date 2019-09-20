@@ -140,9 +140,37 @@ module.exports = {
                 }
                 payment.getStatus(status, external_id)
                 .then(row => {
-                    res.json({
-                        row
+                    payment.getPaymentPriceByInvocie(external_id)
+                    .then(ress => {
+                        Object.keys(ress).forEach(key => {
+                            const DataResult = ress[key]
+
+                            const hotel_id = DataResult.hotel_id
+                            const bed_type = DataResult.bed_type
+                            const room_number = DataResult.room_number
+                            const price = DataResult.price
+
+                            payment.roomChangeStatus(room_number, hotel_id, bed_type, price)
+                            .then(rows => {
+                                res.json({
+                                    rows
+                                })
+                            })
+                            .catch(err => {
+                                res.json({
+                                    err: err
+                                })
+                            })
+                        })
+
+                        // const data = {
+                        //     status: '1'
+                        // }
+
                     })
+                    // res.json({
+                    //     row
+                    // })
                 })
                 .catch(err => {
                     res.json({

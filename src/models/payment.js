@@ -36,8 +36,18 @@ module.exports = {
   getPaymentPrice: id =>
     new Promise((resolve, reject) => {
       conn.query(
-        "SELECT invoice, price, room_number FROM hotel_reservation WHERE id = ?",
+        "SELECT invoice, price, room_number, hotel_id, bed_type FROM hotel_reservation WHERE id = ?",
         id,
+        (err, row) => {
+          !err ? resolve(row) : reject(err);
+        }
+      );
+    }),
+    getPaymentPriceByInvocie: invoice =>
+    new Promise((resolve, reject) => {
+      conn.query(
+        "SELECT invoice, price, room_number, hotel_id, bed_type FROM hotel_reservation WHERE invoice = ?",
+        invoice,
         (err, row) => {
           !err ? resolve(row) : reject(err);
         }
@@ -53,4 +63,14 @@ module.exports = {
         }
       );
     }),
+    roomChangeStatus: (room_number, hotel_id, bed_type, price) =>
+     new Promise((resolve, reject) => {
+       conn.query(
+         "UPDATE room SET status = '1' WHERE hotel_id = ? AND bed_type = ? AND room_number = ? AND price = ?",
+         [hotel_id, bed_type, room_number , price],
+         (err, row) => {
+           !err ? resolve(row) : reject(err)
+         }
+       )
+     }) 
 };
