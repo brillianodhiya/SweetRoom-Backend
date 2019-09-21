@@ -7,5 +7,6 @@ const Auth = require('../middleware/auth')
 Route
     .post('/:id', Auth,paymentController.actionPay)
     .post('/callback/a', paymentController.callBackPayment)
+    .get('/getall', paymentController.getAllPayment)
 
 module.exports = Route

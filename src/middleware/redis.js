@@ -32,6 +32,18 @@ module.exports = {
             }
         })
     },
+    cacheGetAllHotel4: (req, res, next) => {
+        client.get('getHotel4', (err, data) => {
+            if (err) throw err;
+
+            if (data !== null) {
+                console.log('redis')
+                helper.response(res, JSON.parse(data), 200);
+            } else {
+                next();
+            }
+        })
+    },
     clearGetAllHotel: (req, res, next) => {
         client.del('getHotel')
         next();

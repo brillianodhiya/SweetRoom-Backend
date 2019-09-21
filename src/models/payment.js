@@ -64,13 +64,19 @@ module.exports = {
       );
     }),
     roomChangeStatus: (room_number, hotel_id, bed_type, price) =>
-     new Promise((resolve, reject) => {
-       conn.query(
-         "UPDATE room SET status = '1' WHERE hotel_id = ? AND bed_type = ? AND room_number = ? AND price = ?",
-         [hotel_id, bed_type, room_number , price],
-         (err, row) => {
-           !err ? resolve(row) : reject(err)
-         }
-       )
-     }) 
+      new Promise((resolve, reject) => {
+        conn.query(
+          "UPDATE room SET status = '1' WHERE hotel_id = ? AND bed_type = ? AND room_number = ? AND price = ?",
+          [hotel_id, bed_type, room_number , price],
+          (err, row) => {
+            !err ? resolve(row) : reject(err)
+          }
+        )
+      }),
+    getAllPayment: () =>
+    new Promise((resolve, reject) => {
+      conn.query("SELECT * FROM payment ORDER BY id DESC", (err, row) => {
+        !err ? resolve(row) : reject(err)
+      })
+    })
 };

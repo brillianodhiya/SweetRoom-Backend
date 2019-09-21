@@ -14,7 +14,7 @@ Route
     .get('/user/:user_id', reservationController.actionFindReservByUser)
     .delete('/delete/:id', reservationController.actionDeleteReservation)
     .post('/makeStatusSuccess/:id', reservationController.actionMakeSuccess)
-    .post('/makeStatusCancel/:id', reservationController.actionMakeCancel)
+    .post('/makeStatusCancel', reservationController.onCancelBooking)
     .get('/history/a', reservationController.History)
     .get('/latest/a', reservationController.getLatestRec)
 

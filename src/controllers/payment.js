@@ -152,9 +152,7 @@ module.exports = {
 
                             payment.roomChangeStatus(room_number, hotel_id, bed_type, price)
                             .then(rows => {
-                                res.json({
-                                    rows
-                                })
+                                res.json(rows)
                             })
                             .catch(err => {
                                 res.json({
@@ -195,5 +193,18 @@ module.exports = {
                     error: err
                 })
             })
+    },
+    getAllPayment: (req, res) => {
+        payment.getAllPayment()
+        .then(row => {
+            res.json({
+                row
+            })
+        })
+        .catch(err => {
+            res.json({
+                err
+            })
+        })
     }
 }

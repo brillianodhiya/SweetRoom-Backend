@@ -2,6 +2,7 @@ const reservation = require("../models/reservation");
 // const user = require("../models/user");
 // const hotel = require("../models/hotel");
 const jwtDecode = require('jwt-decode')
+const StatusChange = require('../models/payment')
 
 module.exports = {
   insertReservation: (req, res) => {
@@ -17,6 +18,7 @@ module.exports = {
     const invoice = "SR" + Date.now();
     const reservation_date = new Date(); 
     const num_people = req.body.num_people;
+    const price = req.body.price
     const status = 'WAITING PAYMENT'
     const data = {
       status: '0'
@@ -41,7 +43,7 @@ module.exports = {
   
               const bed_type = hotel.bed_type;
               const room_number = hotel.room_number;
-              const price = hotel.price;
+              // const price = hotel.price;
   
               reservation
                 .actionReservation([
@@ -334,5 +336,35 @@ module.exports = {
           error: err
         })
       })
-  }
+  },
+  onCancelBooking: (req, res) => {
+    const external_id = req.body.external_id
+
+    const status = {
+      status: 'CANCEL'
+    }
+      StatusChange.getStatus(status, external_id)
+      .then(row => {
+        Object.keys(row).forEach(key => {
+          const DataResult = row[key]
+  
+          const hotel_id = DataResult.hotel_id
+          const bed_type = DataResult.bed_type
+          const room_number = DataResult.room_number
+          const price = DataResult.price
+  
+          StatusChange.roomChangeStatus(room_number, hotel_id, bed_type, price)
+          .then(rows => {
+            res.json({
+              rows
+            })
+          })
+          .catch(err => {
+            res.json({
+              err: err
+            })
+          })
+        })
+      })
+    }
 };

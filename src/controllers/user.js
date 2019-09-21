@@ -16,7 +16,7 @@ module.exports = {
     const email = req.body.email;
     const password = bcrypt.hashSync(req.body.password);
     const birth = req.body.birth;
-    const photo = "https://cdn.kastatic.org/images/avatars/svg/marcimus.svg";
+    const photo = "http://www.cndajin.com/data/wls/193/17692050.png";
     const level = "user";
     const longitude = req.body.longitude || 1029209;
     const latitude = req.body.latitude || 87318238;
@@ -98,7 +98,7 @@ module.exports = {
     const email = req.body.email;
     const password = bcrypt.hashSync(req.body.password);
     const birth = req.body.birth;
-    const photo = "https://cdn.kastatic.org/images/avatars/svg/marcimus.svg";
+    const photo = "https://pngriver.com/wp-content/uploads/2018/03/Download-Capricorn-PNG-Transparent-Picture-For-Designing-Projects.png";
     const level = "mitra";
     const longitude = req.body.longitude || 1029209;
     const latitude = req.body.latitude || 87318238;
@@ -276,21 +276,23 @@ module.exports = {
   },
   actionUpdateUser: (req, res) => {
       const id = req.params.id
-      const data = {
-          first_name: req.body.first_name,
-          last_name: req.body.last_name,
-          birth: req.body.birth,
-          photo: req.body.photo,
-          city: req.body.city,
-          address: req.body.address,
-          phone: req.body.phone,
-          firebase_id: req.body.firebase_id,
-          device_id: req.body.device_id,
-          pushToken: req.body.pushToken
-      }
+      const data = req.body
+      // {
+      //     first_name: req.body.first_name,
+      //     last_name: req.body.last_name,
+      //     birth: req.body.birth,
+      //     photo: req.body.photo,
+      //     city: req.body.city,
+      //     address: req.body.address,
+      //     phone: req.body.phone,
+      //     firebase_id: req.body.firebase_id,
+      //     device_id: req.body.device_id,
+      //     pushToken: req.body.pushToken
+      // }
 
       userAction.updateUser(id, data)
       .then(row => {
+        console.log(row)
           res.json({
               success: true,
               message: "Update Success",
@@ -299,6 +301,7 @@ module.exports = {
           })
       })
       .catch(err => {
+        console.log(err)
           res.json({
               success: false,
               message: "Update User Failed",
